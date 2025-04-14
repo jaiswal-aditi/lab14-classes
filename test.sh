@@ -3,21 +3,24 @@
 echo "Running tests..."
 echo
 
-# Run program and capture output
-output=$(./fileio < test/test_input.txt)
+./person < test/input.txt > test/actual_output.txt
 
-# Normalize: remove all non-numeric/char data
-normalized_output=$(echo "$output" | grep -Eo '[0-9]+\.[0-9]+|[0-9]+|[A-Za-z]' | tr -d '\n')
+# Strip all whitespace and match only final output
+filtered=$(grep -E "Name:|Age:|Country:" test/actual_output.txt | tr -d '[:space:]')
+expected=$(tr -d '[:space:]' < test/expected_output.txt)
 
-# Expected (flattened)
-expected_output="423.14A257.50B1001.23C"
+if [ $? -eq 0 ]; then
+  echo "✅ Program exited successfully"
+else
+  echo "❌ Program did not exit cleanly"
+  exit 1
+fi
 
-if [ "$normalized_output" == "$expected_output" ]; then
+if [[ "$filtered" == "$expected" ]]; then
   echo "✅ Test passed"
-  exit 0
 else
   echo "❌ Test failed"
-  echo "Expected: $expected_output"
-  echo "Got     : $normalized_output"
+  echo "Expected: $expected"
+  echo "Got     : $filtered"
   exit 1
 fi
