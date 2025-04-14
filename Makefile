@@ -1,15 +1,16 @@
 # Compiler
-CC = gcc
-TARGET = fileio
+CC = g++
+TARGET = person
 
 all: $(TARGET)
 
-$(TARGET): main.c
-	$(CC) main.c -o $(TARGET)
+$(TARGET): person.cpp
+	$(CC) person.cpp -o $(TARGET)
 
 clean:
 	rm -f $(TARGET)
 
 test: $(TARGET)
 	bash test.sh
+
 
